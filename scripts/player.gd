@@ -5,6 +5,7 @@ signal player_take_damage
 @export var PLAYER_SPEED: int = 300.0
 
 @onready var rocket_container: Node = $RocketContainer
+@onready var launch_rocket: AudioStreamPlayer = $"../LaunchRocket"
 
 const ROCKET_SCENE = preload("res://scenes/rocket.tscn")
 
@@ -28,6 +29,7 @@ func _process(_delta: float) -> void:
 		shoot()
 
 func shoot() -> void:
+	launch_rocket.play()
 	var rocket_instance = ROCKET_SCENE.instantiate()
 	rocket_container.add_child(rocket_instance)
 	rocket_instance.global_position = global_position

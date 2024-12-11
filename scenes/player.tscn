@@ -1,8 +1,37 @@
-[gd_scene load_steps=4 format=3 uid="uid://dc4qluxbbit8a"]
+[gd_scene load_steps=10 format=3 uid="uid://dc4qluxbbit8a"]
 
 [ext_resource type="Texture2D" uid="uid://dpsp3lftp6qt6" path="res://assets/textures/player_ship.png" id="1_2fpm7"]
 [ext_resource type="Script" path="res://scenes/player_node.gd" id="1_5j06t"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_7bnxp"]
+[ext_resource type="AudioStream" uid="uid://bfomody134rma" path="res://assets/audio/sfx_laser2.wav" id="4_yttky"]
+
+[sub_resource type="Gradient" id="Gradient_au085"]
+offsets = PackedFloat32Array(0, 0.557377, 1)
+colors = PackedColorArray(0.47, 0.0799, 0.131913, 0, 0.77, 0.48664, 0.0616, 1, 1, 0.816667, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_p3mds"]
+gradient = SubResource("Gradient_au085")
+
+[sub_resource type="Curve" id="Curve_s0gox"]
+_data = [Vector2(0, 0.186813), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ni87t"]
+curve = SubResource("Curve_s0gox")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_okwpc"]
+lifetime_randomness = 0.3
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(2, 15, 1)
+spread = 30.0
+initial_velocity_min = -200.0
+initial_velocity_max = -200.0
+gravity = Vector3(0, 0, 0)
+scale_min = 10.0
+scale_max = 10.0
+scale_curve = SubResource("CurveTexture_ni87t")
+color_ramp = SubResource("GradientTexture1D_p3mds")
 
 [node name="Player" type="Node2D"]
 script = ExtResource("1_5j06t")
@@ -20,5 +49,15 @@ scale = Vector2(0.2, 0.2)
 texture = ExtResource("1_2fpm7")
 
 [node name="RocketContainer" type="Node" parent="CharacterBody2D"]
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="CharacterBody2D"]
+position = Vector2(-31, 0)
+amount = 100
+process_material = SubResource("ParticleProcessMaterial_okwpc")
+lifetime = 0.3
+fixed_fps = 60
+
+[node name="LaunchRocket" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_yttky")
 
 [connection signal="player_take_damage" from="CharacterBody2D" to="." method="_on_character_body_2d_player_take_damage"]
