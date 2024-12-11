@@ -1,5 +1,7 @@
 extends Node2D
 
+signal enemy_spawned(enemy_instance)
+
 const ENEMY: PackedScene = preload("res://scenes/enemy.tscn")
 @onready var timer: Timer = $Timer
 
@@ -18,4 +20,4 @@ func get_random_spawn_height() -> float:
 func spawn_random_enemy() -> void:
 	var enemy_instance = ENEMY.instantiate()
 	enemy_instance.global_position = Vector2(get_viewport_rect().size.x + 50, get_random_spawn_height())
-	add_child(enemy_instance)
+	emit_signal("enemy_spawned", enemy_instance)

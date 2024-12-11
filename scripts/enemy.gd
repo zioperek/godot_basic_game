@@ -5,6 +5,8 @@ extends Area2D
 
 @onready var visible_on_screen_notifier_2d: VisibleOnScreenNotifier2D = $VisibleOnScreenNotifier2D
 
+signal increase_score
+
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var ENEMY_SPEED: float = rng.randf_range(ENEMY_SPEED_MIN, ENEMY_SPEED_MAX)
 
@@ -21,4 +23,9 @@ func clear_instance():
 	queue_free()
 
 func die():
+	emit_signal("increase_score")
 	queue_free()
+
+func _on_body_entered(body: Node2D) -> void:
+	queue_free()
+	body.take_damage()

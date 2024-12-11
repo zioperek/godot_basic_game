@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+signal player_take_damage
+
 @export var PLAYER_SPEED: int = 300.0
 
 @onready var rocket_container: Node = $RocketContainer
@@ -25,9 +27,14 @@ func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("rocketLaunch"):
 		shoot()
 
-
 func shoot() -> void:
 	var rocket_instance = ROCKET_SCENE.instantiate()
 	rocket_container.add_child(rocket_instance)
 	rocket_instance.global_position = global_position
 	rocket_instance.global_position.x += 60
+
+func die() -> void:
+	queue_free()
+	
+func take_damage():
+	emit_signal("player_take_damage")
